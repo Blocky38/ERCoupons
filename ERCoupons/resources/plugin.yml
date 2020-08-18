@@ -1,0 +1,10 @@
+name: ${project.name}
+author: Stefatorus
+version: ${project.version}
+api-version: 1.13
+description: ${plugin.description}
+main: ${project.groupId}.${project.artifactId}.Main
+commands:
+  ${project.name}:
+    description: command reserved for plugin
+  

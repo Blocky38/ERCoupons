@@ -3,17 +3,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>cx.sfy</groupId>
-	<artifactId>templateplugin</artifactId>
+	<groupId>com.entryrise</groupId>
+	<artifactId>coupons</artifactId>
 	<version>0.1</version>
 	<packaging>jar</packaging>
 
-	<name>TemplatePlugin</name>
+	<name>ERCoupons</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<plugin.description>Template Plugin Description</plugin.description>
+		<plugin.description>EntryRise coupon tool</plugin.description>
 	</properties>
 
 	<build>
@@ -59,7 +59,7 @@
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<!-- Peasants don't update or use new features :D -->
-			<version>1.12.2-R0.1-SNAPSHOT</version>
+			<version>1.8.8-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

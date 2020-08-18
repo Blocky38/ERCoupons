@@ -39,8 +39,7 @@ public class HeadUtils {
         return head;
     }
     
-    @SuppressWarnings("deprecation")
-	public static ItemStack getPlayerSkull(String username) {
+    public static ItemStack getPlayerSkull(String username) {
     	ItemStack head = getSkullItem();
     	ItemMeta imeta = head.getItemMeta();
     	

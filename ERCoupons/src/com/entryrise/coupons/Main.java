@@ -17,7 +17,7 @@ import com.entryrise.coupons.utils.Others;
 public class Main extends JavaPlugin implements Listener
 {
 	public static String USER = "%%__USER__%%";
-	public static final String PREFIX = "§c§lTemplate§f§lPlugin §e» §f";
+	public static final String PREFIX = "§2§lER§f§lCoupons §e» §f";
 
 	public static JavaPlugin p;
 

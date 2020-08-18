@@ -9,6 +9,8 @@ import java.util.UUID;
 import com.entryrise.coupons.utils.CSUtils;
 import com.entryrise.coupons.utils.MathUtils;
 import com.entryrise.coupons.Data;
+import com.entryrise.coupons.Main;
+
 import org.bukkit.entity.Player;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,20 +22,25 @@ public class CommandListener implements CommandExecutor {
 		final Player p = (sender instanceof Player) ? (Player) sender : null;
 		if (args.length == 0) {
 			if (p == null) {
-				sender.sendMessage("§2§lER§f§lCoupons §e» §f");
+				sender.sendMessage(Main.PREFIX + "");
 				return true;
 			}
-			sender.sendMessage("§2§lER§f§lCoupons §e» §fYou have " + Data.getCredits(p.getUniqueId())
+			sender.sendMessage(Main.PREFIX + "You have " + Data.getCredits(p.getUniqueId())
 					+ " credits in your account.");
 			return true;
 		} else {
-			if (args.length == 1) {
-				final int count = MathUtils.isInt(args[0]) ? Integer.valueOf(args[0]) : -1;
+			if (args.length == 1 && MathUtils.isInt(args[0])) {
+				final int count = Integer.valueOf(args[0]);
 				Data.createCoupon(p, count);
 				return true;
-			}
-			if (args.length == 2) {
-				if (args[0].equalsIgnoreCase("store")) {
+			} else if (args.length == 1 && args[0].equalsIgnoreCase("version")) {
+				sender.sendMessage(Main.PREFIX + "You are using ERCoupons v" + Main.p.getDescription().getVersion() + " by EntryRise: https://git.entryrise.com/EntryRise/ERCoupons");
+				return true;
+			} else if (args.length == 1) {
+				sender.sendMessage(Main.PREFIX + "To create a virtual coupon, please use /coupons (AMOUNT)");
+				return true;
+			} else if (args.length == 2) {
+				if (args[0].equalsIgnoreCase("redeem")) {
 					final int count = MathUtils.isInt(args[1]) ? Integer.valueOf(args[1]) : -1;
 					CSUtils.redeemStore(p, (long) count);
 					return true;
@@ -46,9 +53,9 @@ public class CommandListener implements CommandExecutor {
 					} catch (Exception e) {
 						u = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
 					}
-					final int amount = MathUtils.isInt(args[2]) ? Integer.valueOf(args[2]) : 0;
+					int amount = MathUtils.isInt(args[2]) ? Integer.valueOf(args[2]) : 0;
 					if (amount == 0) {
-						sender.sendMessage("§2§lER§f§lCoupons §e» §fMUST BE NEGATIVE OR POSITIVE NUMBER.");
+						sender.sendMessage(Main.PREFIX + "MUST BE NEGATIVE OR POSITIVE NUMBER.");
 						return true;
 					}
 					Data.setCredits(u, Data.getCredits(u) + amount);
@@ -60,12 +67,12 @@ public class CommandListener implements CommandExecutor {
 					} catch (Exception e) {
 						u = Bukkit.getOfflinePlayer(args[1]).getUniqueId();
 					}
-					final double amount2 = MathUtils.isDouble(args[2]) ? Double.valueOf(args[2]) : -1.0;
-					if (amount2 == -1.0) {
-						sender.sendMessage("§2§lER§f§lCoupons §e» §fMUST BE NEGATIVE OR POSITIVE NUMBER.");
+					double amount = MathUtils.isDouble(args[2]) ? Double.valueOf(args[2]) : -1.0;
+					if (amount == -1.0) {
+						sender.sendMessage(Main.PREFIX + "MUST BE NEGATIVE OR POSITIVE NUMBER.");
 						return true;
 					}
-					Data.setCredits(u, Data.getCredits(u) + (long) (amount2 * 100.0));
+					Data.setCredits(u, Data.getCredits(u) + (long) (amount * 100.0));
 					return true;
 				}
 			}

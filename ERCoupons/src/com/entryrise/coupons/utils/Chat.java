@@ -10,7 +10,7 @@ public class Chat {
 	public static TextComponent genHoverAndSuggestTextComponent(String show, String hover, String click) {
 		TextComponent msg = new TextComponent(show);
 		msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
-		msg.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/" + click));
+		msg.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,  click));
 		return msg;
 	}
 

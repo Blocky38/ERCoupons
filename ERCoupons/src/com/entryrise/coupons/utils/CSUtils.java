@@ -27,30 +27,39 @@ import net.md_5.bungee.api.chat.BaseComponent;
 
 public class CSUtils {
 	private static String url = "https://api.craftingstore.net/v7/gift-cards";
-	
+
 	public static void redeemStore(final Player p, final long credits) {
 		if (p == null) {
 			return;
 		}
 		if (credits < 1L) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou need to specify the amount of credits to redeem your credits.");
+			p.sendMessage(Main.PREFIX + "You need to specify the amount of credits to redeem your credits.");
 			return;
 		}
 		if (credits % 100L != 0L) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou can only redeem multiples of 100 credits.");
+			p.sendMessage(Main.PREFIX + "You can only redeem multiples of 100 credits.");
 			return;
 		}
+
+		int max = Main.config.getInt("settings.redeem.max");
+		int min = Main.config.getInt("settings.redeem.min");
+
+		if (min > credits || max < credits) {
+			p.sendMessage(
+					Main.PREFIX + "You can only redeem coupons valuing between " + min + " and " + max + " coupons.");
+			return;
+		}
+
 		final UUID u = p.getUniqueId();
 		final long available = Data.getCredits(u);
 		final long rem = available - credits;
 		if (rem < 0L) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou need " + -rem
-					+ " more credits to be able to create this store giftcard");
+			p.sendMessage(Main.PREFIX + "You need " + -rem + " more credits to be able to create this store giftcard");
 			return;
 		}
 		Data.setCredits(u, rem);
 		final long dollars = credits / 100L;
-		p.sendMessage("§2§lER§f§lCoupons §e» §fWe're currently contacting the store and creating your coupon...");
+		p.sendMessage(Main.PREFIX + "We're currently contacting the store and creating your coupon...");
 		Bukkit.getScheduler().runTaskAsynchronously(Main.p, () -> CSUtils.giveCoupon(p, dollars));
 	}
 
@@ -59,11 +68,11 @@ public class CSUtils {
 		Bukkit.getLogger().info("STORE TRANSACTION " + transactionid.toString() + " with " + p.getName() + " STARTED!");
 		try {
 			final URL u = new URL(CSUtils.url);
-			
+
 			final HttpsURLConnection conn = (HttpsURLConnection) u.openConnection();
 			final String urlParameters = "{\"amount\": \"" + dollars + "\"}";
 			final byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
-			
+
 			conn.setDoOutput(true);
 			conn.setInstanceFollowRedirects(false);
 			conn.setRequestMethod("POST");
@@ -81,17 +90,18 @@ public class CSUtils {
 			final String stg = (conn.getResponseCode() == 200) ? getInputStreamString(conn.getInputStream())
 					: getInputStreamString(conn.getErrorStream());
 
-			final JsonParser parser = new JsonParser();
-			final JsonObject o = parser.parse(stg).getAsJsonObject();
-			final String code = ((JsonObject) o.get("data")).get("code").getAsString();
+			System.out.println(stg);
 
-			p.sendMessage("§2§lER§f§lCoupons §e» §fGIFT-CARD Succesfully printed below.");
-			p.spigot().sendMessage((BaseComponent) Chat.genHoverAndSuggestTextComponent(
-					"§2§lER§f§lCoupons §e» §f§c" + code, "Click, CTRL+A, CTRL+C, and paste with CTRL+V", code));
+			JsonParser parser = new JsonParser();
+			JsonObject o = parser.parse(stg).getAsJsonObject();
+			String code = ((JsonObject) o.get("data")).get("code").getAsString();
+
+			p.sendMessage(Main.PREFIX + "GIFT-CARD Succesfully printed below.");
+			p.spigot().sendMessage((BaseComponent) Chat.genHoverAndSuggestTextComponent(Main.PREFIX + "§c" + code,
+					"Click, CTRL+A, CTRL+C, and paste with CTRL+V", code));
 		} catch (Exception e) {
-			p.sendMessage(
-					"§2§lER§f§lCoupons §e» §fSomething went wrong with creating your store coupon. Urgently contact staff. "
-							+ transactionid.toString());
+			p.sendMessage(Main.PREFIX + "Something went wrong with creating your store coupon. Urgently contact staff. "
+					+ transactionid.toString());
 			Bukkit.getLogger()
 					.warning("STORE TRANSACTION " + transactionid.toString() + " with " + p.getName() + " WENT WRONG!");
 			e.printStackTrace();

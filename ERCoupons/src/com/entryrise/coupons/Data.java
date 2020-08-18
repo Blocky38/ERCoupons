@@ -80,21 +80,24 @@ public class Data {
 		final UUID u = p.getUniqueId();
 		final long available = getCredits(u);
 
-		if (credits > 5000) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou can make a coupon holding a maximum of 5000 credits");
+		int min = Main.config.getInt("settings.virtual.min");
+		int max = Main.config.getInt("settings.virtual.max");
+		
+		if (credits > max) {
+			p.sendMessage(Main.PREFIX + "You can make a coupon holding a maximum of " + max + " credits");
 			return;
 		}
-		if (credits < 50) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou can't make a coupon holding under 50 credits");
+		if (credits < min) {
+			p.sendMessage(Main.PREFIX + "You can't make a coupon holding under " + min + " credits");
 			return;
 		}
 		if (available < credits) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou need another " + (available - credits)
+			p.sendMessage(Main.PREFIX + "You need another " + (available - credits)
 					+ " credits to afford creating this coupon.");
 			return;
 		}
 		if (p.getInventory().firstEmpty() == -1) {
-			p.sendMessage("§2§lER§f§lCoupons §e» §fYou need to make space in your inventory to create a coupon.");
+			p.sendMessage(Main.PREFIX + "You need to make space in your inventory to create a coupon.");
 			return;
 		}
 
@@ -174,7 +177,7 @@ public class Data {
 		}
 		long current = getCredits(u);
 		setCredits(u, current + credits);
-		p.sendMessage("§2§lER§f§lCoupons §e» §fYou have redeemed a coupon worth " + credits + " credits. Current: "
+		p.sendMessage(Main.PREFIX + "You have redeemed a coupon worth " + credits + " credits. Current: "
 				+ (current + credits));
 		return true;
 	}

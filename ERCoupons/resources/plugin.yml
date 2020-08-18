@@ -7,4 +7,5 @@ main: ${project.groupId}.${project.artifactId}.Main
 commands:
   ${project.name}:
     description: command reserved for plugin
+    aliases: [coupon, coupons, ercoupon]
   

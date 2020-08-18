@@ -82,7 +82,7 @@ public class Data {
 
 		int min = Main.config.getInt("settings.virtual.min");
 		int max = Main.config.getInt("settings.virtual.max");
-		
+
 		if (credits > max) {
 			p.sendMessage(Main.PREFIX + "You can make a coupon holding a maximum of " + max + " credits");
 			return;
@@ -152,7 +152,7 @@ public class Data {
 
 		long credits = data.getLong(loc, -1);
 		PlayerInventory pinv = p.getInventory();
-		if (credits == -1L) {
+		if (credits == -1) {
 			for (int i = 0; i < pinv.getSize(); ++i) {
 				final ItemStack itm = pinv.getItem(i);
 				if (itm != null) {

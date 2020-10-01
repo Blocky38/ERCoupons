@@ -21,8 +21,7 @@ public class CouponListener implements Listener {
 	public void onCouponInteract(PlayerInteractEvent e) {
 		final Player p = e.getPlayer();
 		final ItemStack itm = e.getItem();
-		if (e.getAction().toString().contains("RIGHT_CLICK")) {
-			e.setCancelled(true);
+		if (!e.getAction().toString().contains("RIGHT_CLICK")) {
 			return;
 		}
 		Data.couponAction(p, itm, true);
